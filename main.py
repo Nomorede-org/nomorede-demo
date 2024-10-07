@@ -85,7 +85,7 @@ with st.sidebar:
 if 'status' not in st.session_state:
     st.session_state.status = False
 if selected == "Home":
-    st.title("Personal Styling 🧢👟👖🎧🧋")
+    st.title("Personal Styling 🧢👟👖🎧")
     st.markdown("**Personal Details**")
     
     name=st.text_input("Hey, We’re curious to know your Name?")
@@ -93,19 +93,18 @@ if selected == "Home":
     st.markdown("**Body Measurements**")
     unit_height = st.radio(
         "What Unit are you measuring in?",
-        ["Meter", "Feet", "inche"]
+        ["Meter"]
     )
     # foot_size = st.number_input("Foot Size", min_value=1, max_value=15)
     weight = st.number_input("Weight (in kg)", min_value=1)
     height = st.number_input("Height (in units)", min_value=1.0, format="%.2f")
-
     if gender == "Female":
-        bust_size = st.number_input("Bust size", min_value=0)
+        bust_size = st.number_input("Bust size (in Inches)", min_value=0)
     
-    shoulder_width = st.number_input("Shoulder width", min_value=0)
-    hip_size = st.number_input("Hip size", min_value=0)
+    shoulder_width = st.number_input("Shoulder width (in Inches)", min_value=0)
+    hip_size = st.number_input("Hip size (in Inches)", min_value=0)
     # high_hip = st.number_input("High hip", min_value=0)
-    waist_size = st.number_input("Waist size", min_value=0)
+    waist_size = st.number_input("Waist size (in Inches)", min_value=0)
 
     body_image = st.file_uploader('Upload a full body image', type=['png', 'jpeg', 'jpg'])
     face_image = st.file_uploader('Upload a face image', type=['png', 'jpeg', 'jpg'])
