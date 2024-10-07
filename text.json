@@ -1,0 +1,18 @@
+{
+"_id":{"$oid":"665c9d8f0aec3e749916cdc9"},
+"customer_id":"665b7eae243c001ccf2e037d",
+"BMI":{"$numberDouble":"23.09"},
+"body_shape":"Apple-shaped",
+"waist_hip_ratio":{"$numberDouble":"0.9333333333333333"},
+"body_image_id":["string"],
+"colors_avoid":["pink","purple","florescent colors"],
+"comment":"i am not comfortable with my upper body so i wanted to ware something that enhances my lower body",
+"created_at":{"$date":{"$numberLong":"1717888507635"}},
+"fabric":["cotton","satin"],
+"face_image_id":["string"],
+"foot_size":{"$numberInt":"7"},
+"gender":"Female",
+"list_of_brands":["westside","H&M","Mauka makii","Mango","Only","global Desi","zudio"],
+"profession":"founder, meetings with fashion people, friends, Vc's ",
+"style_goals":["Casual","Formal","Classic","Party"]
+}

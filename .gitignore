@@ -1,0 +1,5 @@
+/env
+personalData.json
+__pycache__
+prompt.txt
+secrets.toml
