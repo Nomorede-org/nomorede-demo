@@ -107,7 +107,8 @@ if selected == "Home":
     waist_size = st.number_input("Waist size (in Inches)", min_value=0)
 
     body_image = st.file_uploader('Upload a full body image', type=['png', 'jpeg', 'jpg'])
-    face_image = st.file_uploader('Upload a face image', type=['png', 'jpeg', 'jpg'])
+    face_image = st.file_uploader('Upload a selfie', type=['png', 'jpeg', 'jpg'])
+    st.warning("For optimal results, please upload an image with a clearly visible face taken in natural sunlight ☀️.")
     # hand_veins = st.file_uploader('Upload an image of veins on hand', type=['png', 'jpeg', 'jpg'])
     if face_image is not None:
         st.session_state.face_image = face_image
