@@ -3,3 +3,6 @@ personalData.json
 __pycache__
 prompt.txt
 secrets.toml
+best.onnx
+faceshape.py
+test_img1.jpg

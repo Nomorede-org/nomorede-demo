@@ -61,8 +61,8 @@ def generate_lookbook(client_data):
     Avoid: {essential_data['eyewere_suggestion']['Avoid']}.
 
     Hair Suggestions:
-    Recommended: {essential_data['hair_suggestion']['recommended']}.
-    Avoid: {essential_data['hair_suggestion']['avoid']}.
+    Recommended: {essential_data['hair_suggestion']['Recommended']}.
+    Avoid: {essential_data['hair_suggestion']['Avoid']}.
 
     Clothing Suggestions:
     

@@ -1,4 +1,5 @@
 import time
+from faceshape import run_inference
 from products import GetPersonalProduct
 import streamlit as st
 from PIL import Image
@@ -7,6 +8,7 @@ import requests
 from io import BytesIO
 import cv2
 import numpy as np
+from PIL import Image
 from aihelper import generate_lookbook
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
@@ -183,7 +185,6 @@ if selected == "Home":
                     data_post = {
                         'gender': gender,
                     }
-                    # Face shape analysis
                     face_shape_analysis = requests.post(f"{backend_url}/tools/faceAnalysis?gender={gender}", files=files)
                     if face_shape_analysis.status_code != 200:
                         st.error("Failed to submit face image for analysis. Please try again.")
@@ -210,7 +211,7 @@ if selected == "Home":
                     data['tone'] = color_analysis['tone']
                     data['flow'] = color_analysis['flow']
                     data['color_pallet']=color_analysis['color_pallet']
-                    print(data)
+                    # st.text(f"face predicted: {prediction}")
                 else:
                     st.error("Please upload an image with clear face visibility")
             except Exception as e:
