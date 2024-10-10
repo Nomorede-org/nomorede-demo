@@ -1,5 +1,4 @@
-import time
-from faceshape import run_inference
+
 from products import GetPersonalProduct
 import streamlit as st
 from PIL import Image
