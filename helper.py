@@ -185,7 +185,6 @@ def create_color_plot(color_pallet):
     return fig
 
 def GetColorName(hex):
-    # hex=hex[1:]
     url = f"https://www.thecolorapi.com/id?hex={hex[1:]}"
     response = requests.get(url)
     data = response.json()

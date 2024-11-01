@@ -16,6 +16,7 @@ from streamlit_option_menu import option_menu
 # Streamlit Page Configuration
 
 backend_url = st.secrets['general']['BACKEND_URL']
+body_shape_url= st.secrets['general']['BODY_SHAPE_URL']
 
 st.set_page_config(
     page_title="Nomorede",
@@ -99,20 +100,23 @@ if selected == "Home":
     # foot_size = st.number_input("Foot Size", min_value=1, max_value=15)
     weight = st.number_input("Weight (in kg)", min_value=1)
     height = st.number_input("Height (in units)", min_value=1.0, format="%.2f")
-    if gender == "Female":
-        bust_size = st.number_input("Bust size (in Inches)", min_value=0)
+    # if gender == "Female":
+    #     bust_size = st.number_input("Bust size (in Inches)", min_value=0)
     
-    shoulder_width = st.number_input("Shoulder width (in Inches)", min_value=0)
-    hip_size = st.number_input("Hip size (in Inches)", min_value=0)
-    # high_hip = st.number_input("High hip", min_value=0)
-    waist_size = st.number_input("Waist size (in Inches)", min_value=0)
-
+    # shoulder_width = st.number_input("Shoulder width (in Inches)", min_value=0)
+    # hip_size = st.number_input("Hip size (in Inches)", min_value=0)
+    # # high_hip = st.number_input("High hip", min_value=0)
+    # waist_size = st.number_input("Waist size (in Inches)", min_value=0)
+    # st.markdown("**------OR------**")
+    st.image('body-shape-reference.jpg', width=500, caption="*Please share your image in this pose*")
     body_image = st.file_uploader('Upload a full body image', type=['png', 'jpeg', 'jpg'])
     face_image = st.file_uploader('Upload a selfie', type=['png', 'jpeg', 'jpg'])
     st.warning("For optimal results, please upload an image with a clearly visible face taken in natural sunlight ☀️.")
     # hand_veins = st.file_uploader('Upload an image of veins on hand', type=['png', 'jpeg', 'jpg'])
     if face_image is not None:
         st.session_state.face_image = face_image
+    if body_image is not None:
+        st.session_state.body_image = body_image
     st.markdown("**Color Theory**")
     
     st.image('color_analysis.jpg', width=500, caption="Veins Color")
@@ -136,39 +140,71 @@ if selected == "Home":
         "unit_height": unit_height,
         # "foot_size": foot_size,
         "weight": weight,
-        "height": height,
-        "bust_size": bust_size if gender == "Female" else None,
-        "shoulder_width": shoulder_width,
-        "hip_size": hip_size,
-        "waist_size": waist_size,
+        "height": height*100,
+        # "bust_size": bust_size if gender == "Female" else None,
+        # "shoulder_width": shoulder_width,
+        # "hip_size": hip_size,
+        # "waist_size": waist_size,
         "veins_color": veins_color,
         "fabric_like": cloth_prefered_input,
         "features_highlight": features_highlight,
         "area_camoflage": area_camoflage
     }
 
-    body_shape_post = {
-        "gender": gender,
-        "unit": "inche",
-        "bust_size": bust_size if gender == "Female" else 0,
-        "shoulder_width": shoulder_width if gender == "Male" else 0,
-        "hip_size": hip_size,
-        "waist_size": waist_size
-    }
+    # body_shape_post = {
+    #     "gender": gender,
+    #     "unit": "inche",
+    #     "bust_size": bust_size if gender == "Female" else 0,
+    #     "shoulder_width": shoulder_width if gender == "Male" else 0,
+    #     "hip_size": hip_size,
+    #     "waist_size": waist_size
+    # }
 
     # Button to submit the form
     if st.button("Submit"):
         with st.spinner("Analyzing data..."):
             st.write("Calculating Body Shape...")
             try:
-                print(body_shape_post)
-                body_shape = requests.post(f"{backend_url}/tools/bodyShape", json=body_shape_post)
+                image_body=Image.open(body_image)
+                image_bytes = BytesIO()
+                image_bytes.seek(0)
+                image_body.save(image_bytes, format="JPEG")
+                image_bytes = image_bytes.getvalue()
+                files = {"file": ("filename", image_bytes, body_image.type)}
+                headers = {
+                "accept": "application/json",
+                "Content-Type": "multipart/form-data"
+                }
+                body_shape_analysis_response=requests.post(body_shape_url,
+                                                           files=files,
+                                                        #    headers=headers,
+                                                           params={
+                                                           "height":data['height']
+                                                            })
+                print(f"Status Code: {body_shape_analysis_response.status_code}")
+                print("Response BODY SHAPE ANALYSIS JSON:", body_shape_analysis_response.json())
+                # if body_shape_analysis_response.status_code != 200:
+                body_shape_image_response=body_shape_analysis_response.json()
+                data['bust_size']=body_shape_image_response['processed_image']['chest']
+                data['shoulder_width']=body_shape_image_response['processed_image']['shoulder width']
+                data['hip_size']=body_shape_image_response['processed_image']['hips']
+                data['waist_size']=body_shape_image_response['processed_image']['waist']
+                body_shape = requests.post(f"{backend_url}/tools/bodyShape", json={
+                                                                                "gender": gender,
+                                                                                "unit": "inche",
+                                                                                "bust_size":body_shape_image_response['processed_image']['chest'],
+                                                                                "shoulder_width": body_shape_image_response['processed_image']['shoulder width'],
+                                                                                "hip_size": body_shape_image_response['processed_image']['hips'],
+                                                                                "waist_size": body_shape_image_response['processed_image']['waist']
+                                                                            })
                 if body_shape.status_code != 200:
                     st.error("Failed to submit data. Please try again.")
                 body_shape = body_shape.json()
                 print(f"body shape response::{body_shape}")
                 data['body_shape'] = body_shape['body_shape']
                 data['body_shape_suggestion'] = body_shape['body_shape_suggestion']
+                # else:
+                #     st.error("Please retry with different image")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
             
