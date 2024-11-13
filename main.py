@@ -13,6 +13,7 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from helper import GetColorName, create_color_plot, determine_season_and_flow, get_dominant_colors, hex_to_rgb, overlay_color_strip, plot_colors,color_palettes
 from streamlit_option_menu import option_menu
+from waitlist import add_to_waitlist
 # Streamlit Page Configuration
 
 backend_url = st.secrets['general']['BACKEND_URL']
@@ -80,7 +81,7 @@ body_features=[
     ]
 
 with st.sidebar:
-    selected = option_menu("Menu",["Home", 'LookBook','Products','Body Dual','About us',], 
+    selected = option_menu("Menu",["Home", 'LookBook','Products','Contact Us','About us',], 
         icons=['bi-house-door-fill', 'bi-person-fill',"bi bi-boxes",'bi bi-people-fill','bi-info-circle-fill'],menu_icon="bi-list", default_index=0)
     
     # selected
@@ -303,15 +304,27 @@ if selected =='Products':
     # if st.session_state.status == False:
     #     st.markdown("Please fill the form and submit.")
     # else:
-if selected =='Body Dual':
-    st.warning('This section is not yet live', icon="⚠️")
-# if selected=='debug':
-#     if st.session_state.status == False:
-#         st.markdown("Please fill the form and submit.")
-#     else:
-#         json_data = json.dumps(st.session_state.data)
-#         st.json(json_data)
+if selected =='Contact Us':
+    st.markdown("""
+    **Contact Us:**
 
+    If you have any questions or feedback, please don't hesitate to reach out to us. You can contact us through the following channels:
+
+    - Email: [kaushik@nomorede.com](mailto:kaushik@nomorede.com)
+    - Phone: [+91 7816093181](tel:+91 7816093181)
+
+    We value your input and look forward to hearing from you!
+    """)
+    name=st.text_input("Name",placeholder="Ralph")
+    email=st.text_input("Email",placeholder="info@nomorede.com")
+    mobile=st.text_input("Mobile",placeholder="+91 7816093181")
+    message=st.text_area("Message",placeholder="I found this app really useful and it made me look better. Could you make it even better?")
+    if st.button("Submit"):
+        response=add_to_waitlist(name=name,email=email,mobile=mobile,message=message,backend_url=backend_url)
+        if response==200:
+            st.success("Your message has been submitted successfully.")
+        else:
+            st.error(f"Failed to submit your message. Please try again later.")
 if selected =='About us':
     st.markdown("""
 
