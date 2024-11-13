@@ -177,7 +177,6 @@ if selected == "Home":
                 }
                 body_shape_analysis_response=requests.post(body_shape_url,
                                                            files=files,
-                                                        #    headers=headers,
                                                            params={
                                                            "height":data['height']
                                                             })
@@ -272,6 +271,7 @@ elif selected == 'LookBook':
     if st.session_state.status == False:
         st.warning("Please fill the form and submit before viewing the lookbook.")
     else:
+        st.warning("This is not ideally how a customer views our platform, Imagin all products that fit directly as per these suggestions in one place if still not satisfied they can view the entire marketplace.", icon="⚠️")
         if 'summary' in st.session_state:
             st.markdown(st.session_state.summary)
         else:
